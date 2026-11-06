@@ -1,0 +1,7 @@
+C4Context
+title System Context diagram for Access Control AIS
+Person(operator, "Оператор", "Просматривает журнал проходов")
+System(ais, "АИС СКУД", "Проверяет пропуска и сохраняет события")
+System_Ext(turnstiles, "Контроллеры турникетов", "Считывают RFID и исполняют решение")
+Rel(operator, ais, "Получает журнал")
+Rel(turnstiles, ais, "Передает RFID и получает решение")

@@ -1,0 +1,17 @@
+C4Component
+title Component diagram for Integration Gateway
+Container_Ext(client, "Клиент оператора", "WPF", "Показывает журнал")
+System_Ext(turnstiles, "Контроллеры турникетов", "Вызывают проверку")
+Container_Boundary(gateway, "Интеграционный шлюз") {
+ Component(api, "AccessController", "ASP.NET Core MVC", "POST check и GET logs")
+ Component(auth, "AuthHandler", "ASP.NET Core Auth", "Проверяет ключ устройства и роль оператора")
+ Component(service, "AccessService", "C# / Application", "Правила доступа и выборка журнала")
+ Component(repo, "AccessRepository", "C# / EF Core", "Читает пропуска и пишет события")
+}
+ContainerDb(database, "База СКУД", "PostgreSQL", "Пропуска, права и журнал")
+Rel(client, api, "GET /access/logs", "HTTPS / JSON")
+Rel(turnstiles, api, "POST /access/check", "HTTPS / JSON")
+Rel(api, service, "Выполняет сценарий", "C#")
+Rel(service, auth, "Проверяет полномочия", "C#")
+Rel(service, repo, "Вызывает порты репозиториев", "C#")
+Rel(repo, database, "Читает и сохраняет", "SQL / TCP")

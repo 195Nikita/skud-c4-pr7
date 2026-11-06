@@ -1,0 +1,13 @@
+C4Container
+title Container diagram for Access Control AIS
+Person(operator, "Оператор", "Просматривает журнал")
+System_Ext(turnstiles, "Контроллеры турникетов", "Считывают RFID")
+System_Boundary(ais, "АИС СКУД") {
+ Container(client, "Клиент оператора", "C# / WPF", "Фильтрует и отображает журнал")
+ Container(gateway, "Интеграционный шлюз", "C# / ASP.NET Core", "Проверяет доступ и выдает журнал")
+ ContainerDb(database, "База СКУД", "PostgreSQL", "Пропуска, права и журнал")
+}
+Rel(operator, client, "Просматривает события")
+Rel(client, gateway, "GET /access/logs", "HTTPS / JSON")
+Rel(turnstiles, gateway, "POST /access/check", "HTTPS / JSON")
+Rel(gateway, database, "Читает пропуска и пишет журнал", "SQL / TCP")

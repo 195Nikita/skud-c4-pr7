@@ -1,0 +1,15 @@
+C4Component
+title Component diagram for Operator Client
+Person(operator, "Оператор", "Просматривает события")
+Container_Boundary(client, "Клиент оператора") {
+ Component(view, "AccessLogView", "WPF / XAML", "Показывает фильтры и события")
+ Component(vm, "AccessLogViewModel", "C# / MVVM", "Проверяет фильтры и управляет выдачей")
+ Component(http, "AccessApiClient", "C# / HttpClient", "Выполняет запрос журнала")
+ Component(session, "SessionService", "C#", "Хранит токен сеанса")
+}
+Container(gateway, "Интеграционный шлюз", "ASP.NET Core", "Предоставляет журнал")
+Rel(operator, view, "Выбирает фильтры")
+Rel(view, vm, "Передает команды фильтрации", "WPF Binding")
+Rel(vm, http, "Запрашивает страницу", "C#")
+Rel(http, session, "Получает токен", "C#")
+Rel(http, gateway, "GET /access/logs", "HTTPS / JSON")
